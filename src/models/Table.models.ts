@@ -13,13 +13,7 @@ export interface BaseTableProps {
   endAdornment?: any;
   maxLength?: number;
   value?: any;
-  onChange?: (event: any) => void;
   children?: any;
   inputRef?: any;
   color?: 'primary' | 'secondary';
-}
-
-export interface Data {
-  label: string;
-  value: number;
 }

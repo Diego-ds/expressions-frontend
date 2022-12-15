@@ -1,4 +1,4 @@
-import { BaseTableProps, Data } from '../../models/Table.models';
+import { BaseTableProps } from '../../models/Table.models';
 
 const Table = (props: BaseTableProps) => {
   const { children } = props;
@@ -11,7 +11,7 @@ export const TableHead = (props: BaseTableProps) => {
 };
 
 export const TableBody = (props: BaseTableProps) => {
-  const { className, children } = props;
+  const { children } = props;
   return <tbody>{children}</tbody>;
 };
 
