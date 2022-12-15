@@ -1,5 +1,3 @@
-import React from 'react';
-import Autocomplete from './components/inputs/Autocomplete/Autocomplete';
 import Input from './layouts/Input/Input';
 import Navbar from './layouts/Navbar/Navbar';
 import Table from './layouts/Table/Table';

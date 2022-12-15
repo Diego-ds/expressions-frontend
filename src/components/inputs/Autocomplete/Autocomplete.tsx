@@ -9,7 +9,7 @@ interface ExtraAutocompleteProps {
 export type AutocompleteProps = ExtraAutocompleteProps & BaseInputProps;
 
 const Autocomplete = (props: AutocompleteProps) => {
-  const { options, isLoadingOptions } = props;
+  const { options } = props;
 
   const [activeSuggestion, setActiveSuggestion] = useState(0);
   const [suggestions, setSuggestions] = useState(options);
@@ -54,15 +54,15 @@ const Autocomplete = (props: AutocompleteProps) => {
     if (isShown && input) {
       if (suggestions?.length) {
         return (
-          <ul>
+          <ul className="rounded-md">
             {suggestions.map((suggestion, index) => {
               return (
                 <li
                   className={
-                    'p-2 hover:cursor-pointer hover:font-semibold' +
+                    'border border-gray-300 hover:cursor-pointer hover:font-semibold' +
                     (activeSuggestion === index
-                      ? ' active bg-gray-500'
-                      : ' hover:bg-gray-300')
+                      ? ' active bg-gray-300'
+                      : ' hover:bg-gray-200')
                   }
                   key={index}
                   onClick={onClick}
@@ -75,7 +75,7 @@ const Autocomplete = (props: AutocompleteProps) => {
         );
       } else {
         return (
-          <div className="">
+          <div className="p-1">
             <em>Not found</em>
           </div>
         );
@@ -84,17 +84,17 @@ const Autocomplete = (props: AutocompleteProps) => {
     return <></>;
   };
   return (
-    <div className="w-1/3 md:w-1/3 lg:w-1/12">
-      <div className="">
+    <div className="w-1/3 md:w-1/6">
+      <div className="w-full">
         <input
-          className="box-content block w-full appearance-none"
+          className="box-content block w-full appearance-none rounded bg-gray-300 px-1 focus:outline-none"
           type="text"
           onChange={onChange}
           onKeyDown={onKeyDown}
           value={input}
         />
       </div>
-      <div className="absolute box-content block appearance-none rounded bg-white shadow">
+      <div className="absolute z-50 w-1/3 appearance-none rounded-md bg-white shadow md:w-1/12 ">
         {renderAutocomplete()}
       </div>
     </div>
