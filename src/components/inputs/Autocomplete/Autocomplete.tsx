@@ -15,7 +15,6 @@ const Autocomplete = (props: AutocompleteProps) => {
   const [suggestions, setSuggestions] = useState(options);
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
-  const [ignoreBlur, setIgnoreBlur] = useState(false);
 
   const filterSuggestions = (str: string) => {
     const filter = options?.filter(
@@ -78,7 +77,6 @@ const Autocomplete = (props: AutocompleteProps) => {
     setActiveSuggestion(index);
   };
   const mouseSelect = (suggestion: any) => {
-    setIgnoreBlur(true);
     setActiveSuggestion(0);
     setIsOpen(false);
     setInput(suggestion.label);
