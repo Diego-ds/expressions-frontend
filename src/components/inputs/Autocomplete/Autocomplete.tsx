@@ -15,22 +15,27 @@ const Autocomplete = (props: AutocompleteProps) => {
   const [suggestions, setSuggestions] = useState(options);
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
+  const [ignoreBlur, setIgnoreBlur] = useState(false);
 
   const filterSuggestions = (str: string) => {
     const filter = options?.filter(
       (suggestion) =>
-        suggestion.label.toLowerCase().indexOf(input.toLowerCase()) > -1,
+        suggestion.label.toLowerCase().indexOf(str.toLowerCase()) > -1,
     );
     return filter;
   };
 
   const onFocus = (e: any) => {
+    const input = e.currentTarget.value;
+
+    setActiveSuggestion(!Boolean(input) ? -1 : 0);
+    setSuggestions(filterSuggestions(input));
     setIsOpen(true);
   };
   const onChange = (e: any) => {
     const input = e.currentTarget.value;
 
-    setActiveSuggestion(0);
+    setActiveSuggestion(!Boolean(input) ? -1 : 0);
     setSuggestions(filterSuggestions(input));
     setIsOpen(true);
     setInput(e.currentTarget.value);
@@ -39,12 +44,14 @@ const Autocomplete = (props: AutocompleteProps) => {
     if (!isOpen) setIsOpen(true);
   };
   const onBlur = (e: any) => {
-    const input = e.currentTarget.value;
-    const item = Boolean(input) && activeSuggestion && suggestions ? suggestions[activeSuggestion].label : '';
+    const item =
+      activeSuggestion !== -1 && suggestions && suggestions.length !== 0
+        ? suggestions[activeSuggestion].label
+        : '';
 
-    setActiveSuggestion(0);
+    setActiveSuggestion(-1);
     setIsOpen(false);
-    setInput(item)
+    setInput(item);
   };
   const onKeyDown = (e: any) => {
     if (e.keyCode === 13) {
@@ -61,6 +68,7 @@ const Autocomplete = (props: AutocompleteProps) => {
       if (activeSuggestion - 1 === suggestions?.length) return;
       setActiveSuggestion(activeSuggestion + 1);
     } else if (e.keyCode === 27) {
+      // escape key
       setActiveSuggestion(0);
       setIsOpen(false);
       setInput('');
@@ -70,12 +78,13 @@ const Autocomplete = (props: AutocompleteProps) => {
     setActiveSuggestion(index);
   };
   const mouseSelect = (suggestion: any) => {
+    setIgnoreBlur(true);
     setActiveSuggestion(0);
     setIsOpen(false);
     setInput(suggestion.label);
   };
   const renderAutocomplete = () => {
-    if (isOpen && input) {
+    if (isOpen) {
       if (suggestions?.length) {
         return (
           <div className="absolute box-border w-full appearance-none rounded-md bg-white shadow">
@@ -98,7 +107,7 @@ const Autocomplete = (props: AutocompleteProps) => {
         );
       } else {
         return (
-          <div className="py-0.5 px-1.5 bg-gray-300">
+          <div className="bg-gray-300 py-0.5 px-1.5">
             <em>Not found</em>
           </div>
         );
