@@ -33,14 +33,15 @@ export type CustomText = {
 
 interface ExtraAutosuggestProps {
   options: Object;
-  postRule: any;
-  err: string;
+  postRule?: any;
+  err?: string;
+  setErr?: any;
 }
 
 export type AutosuggestProps = ExtraAutosuggestProps & BaseInputProps;
 
 const AutoSuggest = (props: AutosuggestProps) => {
-  const { options, postRule, err } = props;
+  const { options, postRule, err, setErr } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const [target, setTarget] = useState<Range | undefined | null>();
   const [index, setIndex] = useState(0);
@@ -137,9 +138,11 @@ const AutoSuggest = (props: AutosuggestProps) => {
   };
 
   const onApply = (e: any) => {
-    const str = inputArr.join(' ').replace(/ +(?= )/g,'').toLowerCase();
-    postRule({rule:str});
-
+    const str = inputArr
+      .join(' ')
+      .replace(/ +(?= )/g, '')
+      .toLowerCase();
+    postRule({ rule: str });
   };
   const onSave = (e: any) => {
     console.log(inputArr);
@@ -154,6 +157,7 @@ const AutoSuggest = (props: AutosuggestProps) => {
             editor={editor}
             value={initialValue}
             onChange={() => {
+              setErr('');
               const { selection } = editor;
 
               if (selection && Range.isCollapsed(selection)) {
@@ -226,7 +230,7 @@ const AutoSuggest = (props: AutosuggestProps) => {
               </div>
             )}
           </Slate>
-          <label className='text-red-600'>{err}</label>
+          <label className="text-red-600">{err}</label>
         </div>
       </div>
       <div className="flex w-full md:block md:w-1/5">

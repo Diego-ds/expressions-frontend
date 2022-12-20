@@ -14,6 +14,11 @@ const Input = () => {
       setOptions(fetch.data);
     };
     fetchOptions();
+    const fetchRows = async () => {
+      const fetch = await axios.get('rows/');
+      setData(fetch.data);
+    };
+    fetchRows();
   }, []);
 
   const postRule = (rule: any) => {
@@ -61,7 +66,7 @@ const Input = () => {
   return (
     <div>
       <div className="bg-gray-300 p-3">
-        <AutoSuggest options={options} postRule={postRule} err={error} />
+        <AutoSuggest options={options} postRule={postRule} err={error} setErr={setError} />
       </div>
       <div className="m-3 flex w-auto justify-center">
         <Table>

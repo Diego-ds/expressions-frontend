@@ -32,7 +32,6 @@ const Navbar = () => {
         }
       >
         <ul className="flex list-none flex-col md:ml-auto md:flex-row">
-          <Item href="#!" label="Instrucciones" />
         </ul>
       </div>
     </nav>
