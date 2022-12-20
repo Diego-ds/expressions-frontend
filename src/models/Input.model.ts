@@ -19,7 +19,7 @@ export interface BaseInputProps {
   color?: 'primary' | 'secondary';
 }
 
-export interface Option {
+export interface Column {
   label: string;
-  value: string | number | boolean;
+  type: string;
 }

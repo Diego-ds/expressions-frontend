@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { BaseInputProps, Option } from '../../../models/Input.model';
+import { useCallback, useState } from 'react';
+import { BaseInputProps, Column } from '../../../models/Input.model';
 
 interface ExtraAutocompleteProps {
-  options?: Option[];
+  options?: Column[];
+  remove?: any;
   isLoadingOptions?: boolean;
 }
 
 export type AutocompleteProps = ExtraAutocompleteProps & BaseInputProps;
 
 const Autocomplete = (props: AutocompleteProps) => {
-  const { options } = props;
+  const { options, remove } = props;
 
   const [activeSuggestion, setActiveSuggestion] = useState(0);
   const [suggestions, setSuggestions] = useState(options);
@@ -52,27 +53,33 @@ const Autocomplete = (props: AutocompleteProps) => {
     setIsOpen(false);
     setInput(item);
   };
-  const onKeyDown = (e: any) => {
-    if (e.keyCode === 13) {
-      // enter key
-      setActiveSuggestion(0);
-      setIsOpen(false);
-      setInput(suggestions ? suggestions[activeSuggestion].label : '');
-    } else if (e.keyCode === 38) {
-      // up arrow
-      if (activeSuggestion === 0) return;
-      setActiveSuggestion(activeSuggestion - 1);
-    } else if (e.keyCode === 40) {
-      // down arrow
-      if (activeSuggestion - 1 === suggestions?.length) return;
-      setActiveSuggestion(activeSuggestion + 1);
-    } else if (e.keyCode === 27) {
-      // escape key
-      setActiveSuggestion(0);
-      setIsOpen(false);
-      setInput('');
-    }
-  };
+  const onKeyDown = useCallback(
+    (event: any) => {
+      switch (event.key) {
+        case 'ArrowDown':
+          if (activeSuggestion - 1 !== suggestions?.length)
+            setActiveSuggestion(activeSuggestion + 1);
+          break;
+        case 'ArrowUp':
+          if (activeSuggestion !== 0) setActiveSuggestion(activeSuggestion - 1);
+          break;
+        case 'Enter':
+          setActiveSuggestion(0);
+          setIsOpen(false);
+          setInput(suggestions ? suggestions[activeSuggestion].label : '');
+          break;
+        case 'Escape':
+          setActiveSuggestion(-1);
+          setIsOpen(false);
+          setInput('');
+          break;
+        case 'Backspace':
+          if(input==='') {remove()};
+          break;
+      }
+    },
+    [activeSuggestion, input, remove, suggestions],
+  );
   const mouseHighlight = (index: number) => {
     setActiveSuggestion(index);
   };
@@ -85,13 +92,13 @@ const Autocomplete = (props: AutocompleteProps) => {
     if (isOpen) {
       if (suggestions?.length) {
         return (
-          <div className="absolute box-border w-full appearance-none rounded-md bg-white shadow">
+          <div className="z-1 absolute box-border max-h-60 appearance-none overflow-y-scroll rounded-md bg-white shadow">
             {suggestions.map((suggestion, index) => {
               return (
                 <div
                   className={
-                    'w-full border border-gray-300 py-0.5 px-1.5 hover:cursor-pointer' +
-                    (activeSuggestion === index ? ' active bg-gray-300' : '')
+                    'border border-slate-300 py-0.5 px-1.5 hover:cursor-pointer' +
+                    (activeSuggestion === index ? ' active bg-slate-300' : '')
                   }
                   key={index}
                   onClick={() => mouseSelect(suggestion)}
@@ -105,7 +112,7 @@ const Autocomplete = (props: AutocompleteProps) => {
         );
       } else {
         return (
-          <div className="bg-gray-300 py-0.5 px-1.5">
+          <div className="absolute bg-slate-300 py-0.5 px-1.5">
             <em>Not found</em>
           </div>
         );
@@ -113,11 +120,14 @@ const Autocomplete = (props: AutocompleteProps) => {
     }
     return <></>;
   };
+
   return (
-    <div className="relative inline-block w-fit" aria-owns="listbox">
+    <div className="m-0.5 w-fit" aria-owns="listbox">
       <div className="w-fit">
         <input
-          className="box-content block w-full appearance-none rounded bg-gray-300 focus:outline-none"
+          className={
+            'box-content block w-32 appearance-none rounded bg-gray-200 py-0.5 px-1.5 focus:outline-none'
+          }
           onFocus={onFocus}
           onClick={onClick}
           onChange={onChange}
@@ -125,7 +135,7 @@ const Autocomplete = (props: AutocompleteProps) => {
           onBlur={onBlur}
           role="combobox"
           aria-expanded={isOpen}
-          aria-controls={isOpen ? 'listbox' : ''}
+          aria-controls="listbox"
           autoComplete="off"
           value={input}
         />
