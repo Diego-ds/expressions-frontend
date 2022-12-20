@@ -137,9 +137,10 @@ const AutoSuggest = (props: AutosuggestProps) => {
 
   const onApply = (e: any) => {
     const i = inputArr.join(' ');
-    postRule(i);
+    console.log(i)
+    postRule({rule:i});
   };
-  const onPreview = (e: any) => {
+  const onSave = (e: any) => {
     console.log(inputArr);
   };
 
@@ -231,8 +232,8 @@ const AutoSuggest = (props: AutosuggestProps) => {
           <Button fullWidth onClick={onApply}>
             Aplicar
           </Button>
-          <Button fullWidth onClick={onPreview}>
-            Previsualizar
+          <Button fullWidth onClick={onSave}>
+            Guardar
           </Button>
         </div>
         {renderButtons()}

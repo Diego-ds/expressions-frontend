@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import AutoSuggest from '../../components/inputs/Autosuggest/Autosuggest';
-import { Column } from '../../models/Input.model';
 import axios from '../../services/axios';
+import Table from '../Table/Table';
 
 const Input = () => {
   const [options, setOptions] = useState({});
+  const [data, setData] = useState([{}]);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -14,16 +15,55 @@ const Input = () => {
     fetchOptions();
   }, []);
 
-  const postRule = (rule: string) => {
-    axios.post('rows/', rule).then((res:any) => {
-      console.log(res.data)
-    })
-  }
+  const postRule = (rule: any) => {
+    axios.post('rows/', rule).then((res: any) => {
+      setData(res.data.slice(0, 5));
+      console.log(res.data);
+    });
+  };
+
+  const table_header = () => {
+    const columns = Object.keys(data[0]);
+    return (
+      <Table.Row>
+        {columns.map((col, index) => {
+          return (
+            <Table.Cell
+              className="bg-gray-600 font-semibold text-white"
+              key={index}
+            >
+              {col}
+            </Table.Cell>
+          );
+        })}
+      </Table.Row>
+    );
+  };
+
+  const table_body = () => {
+    return data.map((row: any, rowIndex: number) => {
+      const cols = Object.keys(row).map((col: string, colIndex: number) => {
+        return (
+          <Table.Cell className="border-b-2 text-center" key={colIndex}>
+            {row[col].toString()}
+          </Table.Cell>
+        );
+      });
+      return <Table.Row key={rowIndex}>{cols}</Table.Row>;
+    });
+  };
 
   return (
-    <div className="bg-gray-300 p-3">
-      <div className="pl-3 pt-3 font-black">Inicio</div>
-      <AutoSuggest options={options} postRule={postRule} />
+    <div>
+      <div className="bg-gray-300 p-3">
+        <AutoSuggest options={options} postRule={postRule} />
+      </div>
+      <div className="m-3 flex w-auto justify-center">
+        <Table>
+          <Table.Head>{table_header()}</Table.Head>
+          <Table.Body>{table_body()}</Table.Body>
+        </Table>
+      </div>
     </div>
   );
 };
