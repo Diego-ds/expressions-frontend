@@ -15,7 +15,7 @@ import {
   useSelected,
   useFocused,
 } from 'slate-react';
-import { BaseInputProps, Column } from '../../../models/Input.model';
+import { BaseInputProps } from '../../../models/Input.model';
 import Button from '../../buttons/Button/Button';
 
 export type OptionElement = {
@@ -34,12 +34,13 @@ export type CustomText = {
 interface ExtraAutosuggestProps {
   options: Object;
   postRule: any;
+  err: string;
 }
 
 export type AutosuggestProps = ExtraAutosuggestProps & BaseInputProps;
 
 const AutoSuggest = (props: AutosuggestProps) => {
-  const { options, postRule } = props;
+  const { options, postRule, err } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const [target, setTarget] = useState<Range | undefined | null>();
   const [index, setIndex] = useState(0);
@@ -136,9 +137,9 @@ const AutoSuggest = (props: AutosuggestProps) => {
   };
 
   const onApply = (e: any) => {
-    const i = inputArr.join(' ');
-    console.log(i)
-    postRule({rule:i});
+    const str = inputArr.join(' ').replace(/ +(?= )/g,'').toLowerCase();
+    postRule({rule:str});
+
   };
   const onSave = (e: any) => {
     console.log(inputArr);
@@ -225,6 +226,7 @@ const AutoSuggest = (props: AutosuggestProps) => {
               </div>
             )}
           </Slate>
+          <label className='text-red-600'>{err}</label>
         </div>
       </div>
       <div className="flex w-full md:block md:w-1/5">

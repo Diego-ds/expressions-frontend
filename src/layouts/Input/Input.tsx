@@ -6,6 +6,7 @@ import Table from '../Table/Table';
 const Input = () => {
   const [options, setOptions] = useState({});
   const [data, setData] = useState([{}]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -16,10 +17,14 @@ const Input = () => {
   }, []);
 
   const postRule = (rule: any) => {
-    axios.post('rows/', rule).then((res: any) => {
-      setData(res.data.slice(0, 5));
-      console.log(res.data);
-    });
+    axios
+      .post('rows/', rule)
+      .then((res: any) => {
+        setData(res.data.slice(0, 5));
+      })
+      .catch(() => {
+        setError('La regla no es válida.');
+      });
   };
 
   const table_header = () => {
@@ -56,7 +61,7 @@ const Input = () => {
   return (
     <div>
       <div className="bg-gray-300 p-3">
-        <AutoSuggest options={options} postRule={postRule} />
+        <AutoSuggest options={options} postRule={postRule} err={error} />
       </div>
       <div className="m-3 flex w-auto justify-center">
         <Table>
