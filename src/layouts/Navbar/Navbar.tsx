@@ -32,6 +32,7 @@ const Navbar = () => {
         }
       >
         <ul className="flex list-none flex-col md:ml-auto md:flex-row">
+        <button className="mt-4 mr-4 block font-semibold text-white hover:text-teal-200 md:mt-0 md:inline-block">Instrucciones</button>
         </ul>
       </div>
     </nav>
