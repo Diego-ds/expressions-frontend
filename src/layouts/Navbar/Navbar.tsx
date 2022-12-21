@@ -3,7 +3,6 @@ import { ReactNode, useState } from 'react';
 const Navbar = () => {
   const [collapse, setCollapse] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => {};
   return (
     <nav className="flex flex-wrap items-center justify-between bg-gray-900 p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white hover:text-teal-300">
