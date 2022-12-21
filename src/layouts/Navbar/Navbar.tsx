@@ -3,10 +3,10 @@ import { ReactNode, useState } from 'react';
 const Navbar = () => {
   const [collapse, setCollapse] = useState(false);
   return (
-    <nav className="flex flex-wrap items-center justify-between bg-gray-900 p-6">
+    <nav className="flex flex-wrap items-center justify-between bg-slate-900 p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white hover:text-teal-300">
         <span className="font-serif text-xl font-semibold tracking-tight">
-          Motor de búsqueda
+          Search Engine
         </span>
       </div>
       <div className="block md:hidden">
@@ -32,7 +32,7 @@ const Navbar = () => {
         }
       >
         <ul className="flex list-none flex-col md:ml-auto md:flex-row">
-        <button className="mt-4 mr-4 block font-semibold text-white hover:text-teal-200 md:mt-0 md:inline-block">Instrucciones</button>
+        <button className="mt-4 mr-4 block font-semibold text-white hover:text-teal-200 md:mt-0 md:inline-block">Use Guide</button>
         </ul>
       </div>
     </nav>

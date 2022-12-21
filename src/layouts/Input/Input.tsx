@@ -8,16 +8,16 @@ const Input = () => {
   const [data, setData] = useState([{}]);
   const [error, setError] = useState('');
 
+  const fetchOptions = async () => {
+    const fetch = await axios.get('rows/names/');
+    setOptions(fetch.data);
+  };
+  const fetchRows = async () => {
+    const fetch = await axios.get('rows/');
+    setData(fetch.data);
+  };
   useEffect(() => {
-    const fetchOptions = async () => {
-      const fetch = await axios.get('rows/names/');
-      setOptions(fetch.data);
-    };
     fetchOptions();
-    const fetchRows = async () => {
-      const fetch = await axios.get('rows/');
-      setData(fetch.data);
-    };
     fetchRows();
   }, []);
 
@@ -66,7 +66,7 @@ const Input = () => {
   return (
     <div>
       <div className="bg-gray-300 p-3">
-        <AutoSuggest options={options} postRule={postRule} err={error} setErr={setError} />
+        <AutoSuggest options={options} postRule={postRule} err={error} setErr={setError} reset={fetchRows} />
       </div>
       <div className="m-3 flex w-auto justify-center">
         <Table>

@@ -17,6 +17,7 @@ import {
 } from 'slate-react';
 import { BaseInputProps } from '../../../models/Input.model';
 import Button from '../../buttons/Button/Button';
+import axios from '../../../services/axios';
 
 export type OptionElement = {
   type: 'option';
@@ -36,12 +37,13 @@ interface ExtraAutosuggestProps {
   postRule?: any;
   err?: string;
   setErr?: any;
+  reset?: any;
 }
 
 export type AutosuggestProps = ExtraAutosuggestProps & BaseInputProps;
 
 const AutoSuggest = (props: AutosuggestProps) => {
-  const { options, postRule, err, setErr } = props;
+  const { options, postRule, err, setErr, reset } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const [target, setTarget] = useState<Range | undefined | null>();
   const [index, setIndex] = useState(0);
@@ -144,14 +146,14 @@ const AutoSuggest = (props: AutosuggestProps) => {
       .toLowerCase();
     postRule({ rule: str });
   };
-  const onSave = (e: any) => {
-    console.log(inputArr);
+  const onClear = (e: any) => {
+    reset();
   };
 
   return (
     <div className="flex flex-wrap justify-center md:space-x-3">
       <div className="w-full md:w-1/2">
-        <h2>Regla lógica</h2>
+        <h2 className="font-semibold">Logic Rule:</h2>
         <div className=" h-auto w-full rounded border-2 border-gray-900 bg-white p-1.5">
           <Slate
             editor={editor}
@@ -208,7 +210,7 @@ const AutoSuggest = (props: AutosuggestProps) => {
               renderElement={renderElement}
               renderLeaf={renderLeaf}
               onKeyDown={onKeyDown}
-              placeholder="Escribir regla..."
+              placeholder="Write rule..."
             />
             {target && suggestions.length > 0 && (
               <div
@@ -236,10 +238,10 @@ const AutoSuggest = (props: AutosuggestProps) => {
       <div className="flex w-full md:block md:w-1/5">
         <div className="m-1 flex flex-col justify-between md:space-y-2">
           <Button fullWidth onClick={onApply}>
-            Aplicar
+            Apply
           </Button>
-          <Button fullWidth onClick={onSave}>
-            Guardar
+          <Button fullWidth onClick={onClear}>
+            Clear
           </Button>
         </div>
         {renderButtons()}
